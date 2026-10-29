@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Roosevelt Monthly Report
 
-## Getting Started
+A local, static-export-ready Next.js presentation foundation for Roosevelt Private School's English-language monthly report covering 1–31 October 2026. Report content and screenshots are intentionally left empty until approved material is supplied.
 
-First, run the development server:
+## Requirements
+
+- Node.js 24 LTS (recommended; see `.nvmrc`), or a compatible Node.js 22 LTS release
+- npm 10+
+
+## Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). The app uses the Next.js App Router, TypeScript, Tailwind CSS, and Lucide React. Components are Server Components unless a future interactive feature specifically requires a Client Component.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Quality checks and production build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm run typecheck
+npm run build
+```
 
-## Learn More
+`npm run build` generates a fully static site in `out/`. Image optimization is disabled in `next.config.ts`, so future local screenshots and images can be exported for static hosting without a Next.js image server.
 
-To learn more about Next.js, take a look at the following resources:
+## Project structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```text
+src/
+├── app/
+│   ├── globals.css       # Design tokens, global accessibility, and print styles
+│   ├── layout.tsx        # English document metadata and Poppins font
+│   └── page.tsx          # Report page composition
+├── components/
+│   ├── layout/           # Reusable shell, header, and section navigation
+│   └── report/           # Reusable report section presentation
+└── data/
+    └── report.ts         # Typed report content and evidence source
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Editing report content
 
-## Deploy on Vercel
+Edit `src/data/report.ts`. Each section currently has:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `summary`: `null` until approved copy is available
+- `highlights`: an empty list for future completed-work points
+- `evidence`: an empty list for future screenshots and captions
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Keep factual copy, metrics, and evidence metadata in that file rather than embedding them in presentation components. Place future static assets in `public/` and reference them with root-relative paths such as `/evidence/example.webp`. Every image must have meaningful alternative text.
+
+The five required section records and their stable anchor IDs are already present. Do not rename an `id` after links to the section have been shared.
+
+## Design and accessibility foundation
+
+The global stylesheet defines the required dark green (`#183B34`), orange (`#D88D30`), warm white (`#F9F6F1`), and Poppins tokens. The layout includes responsive spacing, a keyboard skip link, visible focus states, reduced-motion behavior, semantic section landmarks, and A4-oriented print rules.
+
+## Static hosting
+
+The project is configured with `output: "export"` and trailing slashes. Upload the contents of `out/` to any static host when deployment is authorized. No deployment configuration, API routes, database, CMS, authentication, or external integrations are included in this phase.
