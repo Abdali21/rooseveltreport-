@@ -44,12 +44,6 @@ export default function Home() {
           />
         ))}
       </main>
-
-      <footer className="border-t border-dark-green/10">
-        <div className="report-container py-8 text-center text-sm text-dark-green/60">
-          {reportData.client} · {reportData.period.label}
-        </div>
-      </footer>
     </ReportShell>
   );
 }

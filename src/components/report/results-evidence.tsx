@@ -8,7 +8,6 @@ import type {
 import { BeforeAfterComparison } from "@/components/report/before-after-comparison";
 import { BusinessProfileKeywordRankings } from "@/components/report/business-profile-keyword-rankings";
 import { LightboxImage } from "@/components/report/lightbox-image";
-import { OrganicSearchPerformance } from "@/components/report/organic-search-performance";
 import { SectionIntro } from "@/components/report/section-intro";
 
 interface ResultsEvidenceProps {
@@ -157,8 +156,6 @@ export function ResultsEvidence({
         />
 
         <BeforeAfterComparison comparison={content.website} />
-
-        <OrganicSearchPerformance content={content.organicSearch} />
     </section>
   );
 }

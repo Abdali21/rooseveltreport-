@@ -13,7 +13,24 @@ export interface ReportEvidence {
 
 export type ReportGroupStatus = "completed" | "ongoing";
 
+export interface ReportGroupBadge {
+  label: string;
+  tone: "verified" | "attention";
+}
+
+export interface ReportCalloutTextPart {
+  emphasis?: boolean;
+  text: string;
+}
+
+export interface ReportGroupCallout {
+  body: readonly ReportCalloutTextPart[];
+  title: string;
+}
+
 export interface ReportListGroup {
+  badge?: ReportGroupBadge;
+  callout?: ReportGroupCallout;
   items: readonly string[];
   status: ReportGroupStatus;
   title: string;
@@ -78,24 +95,6 @@ export interface ReportWebsiteComparison {
   sections: readonly ReportWebsiteComparisonSection[];
 }
 
-export interface OrganicSearchPeriodMetrics {
-  averagePosition: number;
-  clickThroughRate: number;
-  clicks: number;
-  evidence: ReportEvidence;
-  impressions: number;
-  year: number;
-}
-
-export interface OrganicSearchPerformanceContent {
-  current: OrganicSearchPeriodMetrics;
-  heading: string;
-  introduction: string;
-  previous: OrganicSearchPeriodMetrics;
-  sourceNote: string;
-  subtitle: string;
-}
-
 export type KeywordRankingPosition =
   | {
       page: number;
@@ -112,12 +111,22 @@ export interface BusinessProfileKeywordRecord {
   after: KeywordRankingPosition;
   before: KeywordRankingPosition;
   change: KeywordRankingChange;
+  changeLabel?: string;
   keyword: string;
+}
+
+export interface BusinessProfileCompetitionStat {
+  heading: string;
+  value: string;
 }
 
 export interface BusinessProfileKeywordSchool {
   baselineDate: string;
+  competitionStat?: BusinessProfileCompetitionStat;
   currentDate: string;
+  dateLabel?: string;
+  emphasizeCurrentResults?: boolean;
+  highlightCurrentPositions?: readonly number[];
   id: string;
   introduction: string;
   name: string;
@@ -141,7 +150,6 @@ export interface ResultsEvidenceContent {
     heading: string;
     image: ReportEvidence;
   };
-  organicSearch: OrganicSearchPerformanceContent;
   search: {
     heading: string;
     image: ReportEvidence;
@@ -197,44 +205,57 @@ export const reportData = {
       id: "monthly-overview",
       monthlyOverview: {
         website: {
-          heading: "Website Final version",
+          heading: "Website Final Version",
           groups: [
             {
-              title: "Expanded school pages",
+              title: "French-First Rebuild & SEO",
               status: "completed",
               items: [
-                "Entry ages",
-                "School levels",
-                "Subjects",
-                "Lycée streams",
-                "Languages",
-                "Activities",
-                "Facilities",
-                "Opening hours",
-                "School transport",
-                "Admissions information",
+                "Rebuilt the website from scratch with French as the primary language",
+                "Built the SEO strategy around French search terms parents use to find private schools in Tangier",
+                "Researched keywords for Kindergarten, Primary, and Collège & Lycée",
               ],
             },
             {
-              title: "Dedicated pages",
+              title: "New Website Pages",
               status: "completed",
               items: [
-                "Parent reviews",
-                "Admissions",
-                "About the school",
-                "Contact",
-                "Gallery",
-                "Blog",
-                "Legal information",
+                "Dedicated pages for all three campuses",
+                "Admissions, Parent Reviews, About, and Contact",
+                "Gallery, Blog, and Legal Information",
               ],
             },
             {
-              title: "Features and visuals",
+              title: "Expanded Campus Pages",
               status: "completed",
               items: [
-                "French–English language switch",
-                "Admissions form",
-                "Contact form",
+                "Entry ages, school levels, subjects, and lycée streams",
+                "Languages, activities, and facilities",
+                "Opening hours, school transport, and admissions information",
+              ],
+            },
+            {
+              title: "Language Switch & Forms",
+              status: "completed",
+              items: [
+                "Added a French–English language switch",
+                "Added online admissions and contact forms",
+                "Set up the website to store admissions submissions for follow-up",
+              ],
+            },
+            {
+              title: "Website Performance & Security",
+              status: "completed",
+              items: [
+                "Addressed slow page loading by optimizing images and configuring the LiteSpeed Cache plugin",
+                "Connected the website to Cloudflare to help pages load faster and strengthen website security",
+              ],
+            },
+            {
+              title: "Floating WhatsApp Button",
+              status: "completed",
+              items: [
+                "Added a WhatsApp button that stays visible as visitors scroll, so parents can contact the school directly in one tap",
               ],
             },
           ],
@@ -243,32 +264,77 @@ export const reportData = {
           heading: "Google Business Profiles",
           groups: [
             {
-              title: "Profiles optimized",
+              title: "Roosevelt Kindergarten",
               status: "completed",
+              badge: {
+                label: "Verified",
+                tone: "verified",
+              },
               items: [
-                "Roosevelt Private School 2",
-                "Roosevelt Kindergarten",
+                "Successfully verified the Google Business Profile.",
+                "Selected the Kindergarten category and updated the school description, address, opening hours, and contact details.",
+                "Added professional photos and listed the school’s services.",
+                "Linked the profile to the dedicated Kindergarten page and added LinkedIn, Facebook, and Instagram links.",
+                "Published school activity posts and started collecting parent reviews.",
               ],
             },
             {
-              title: "Profile updates",
-              status: "completed",
-              items: [
-                "School categories",
-                "School descriptions",
-                "Opening hours",
-                "Contact details",
-                "Website links",
-                "School photo uploads",
-              ],
-            },
-            {
-              title: "Ongoing work",
+              title: "Roosevelt Private School · Primary",
               status: "ongoing",
+              badge: {
+                label: "Verification in progress",
+                tone: "attention",
+              },
               items: [
-                "Primary school profile recovery",
-                "Alternative verification request",
+                "Successfully verified and optimized the original profile after several attempts.",
+                "Updated the school category, description, address, opening hours, and contact details.",
+                "Added professional photos and listed the school’s services.",
+                "Linked the profile to the dedicated Primary page and added LinkedIn, Facebook, and Instagram links.",
               ],
+              callout: {
+                title: "Duplicate listing",
+                body: [
+                  {
+                    text: "Google removed the optimized profile as a duplicate and kept the older listing public. Verification and updates are now focused on the older listing.",
+                  },
+                ],
+              },
+            },
+            {
+              title: "Roosevelt Private School 2 · Collège & Lycée",
+              status: "ongoing",
+              badge: {
+                label: "Name correction pending",
+                tone: "attention",
+              },
+              items: [
+                "Updated the school category, description, address, opening hours, and contact details.",
+                "Added professional campus photos and listed the school’s services.",
+                "Linked the profile to the dedicated Collège & Lycée page and added LinkedIn, Facebook, and Instagram links.",
+                "Corrected the school name in the Google Business Profile dashboard.",
+              ],
+              callout: {
+                title: "French-language search results",
+                body: [
+                  {
+                    text: "Google’s French-language results still display ",
+                  },
+                  {
+                    emphasis: true,
+                    text: "“Roosevelt School 2 College, Lycee.”",
+                  },
+                  {
+                    text: " English-language results show the corrected name, ",
+                  },
+                  {
+                    emphasis: true,
+                    text: "“Roosevelt Private School 2.”",
+                  },
+                  {
+                    text: " Google Support has been contacted to request a correction.",
+                  },
+                ],
+              },
             },
           ],
         },
@@ -820,40 +886,6 @@ export const reportData = {
             },
           ],
         },
-        organicSearch: {
-          heading: "Organic Search Performance",
-          subtitle: "September–October snapshot · 2025 vs 2026",
-          introduction:
-            "How often our website appeared on Google—and how often it was clicked.",
-          sourceNote:
-            "Source: Google Search Console. Comparison uses the periods shown; the latest 2026 data is preliminary.",
-          previous: {
-            year: 2025,
-            clicks: 61,
-            impressions: 795,
-            clickThroughRate: 7.7,
-            averagePosition: 5.3,
-            evidence: {
-              alt: "Google Search Console chart for the period shown in 2025 with 61 clicks, 795 impressions, 7.7 percent click-through rate, and 5.3 average position",
-              height: 520,
-              src: "/images/report/organic-search/gsc-2025.png",
-              width: 1423,
-            },
-          },
-          current: {
-            year: 2026,
-            clicks: 220,
-            impressions: 2670,
-            clickThroughRate: 8.2,
-            averagePosition: 5.5,
-            evidence: {
-              alt: "Google Search Console chart for the period shown in 2026 with 220 clicks, approximately 2.67 thousand impressions, 8.2 percent click-through rate, 5.5 average position, and preliminary dotted data at the end",
-              height: 511,
-              src: "/images/report/organic-search/gsc-2026.png",
-              width: 1435,
-            },
-          },
-        },
         businessProfileRankings: {
           heading: "Google Business Profile — Keyword Rankings",
           sourceNote:
@@ -863,105 +895,121 @@ export const reportData = {
           schools: [
             {
               baselineDate: "1 October 2026",
-              currentDate: "28 October 2026",
+              competitionStat: {
+                value: "100+",
+                heading:
+                  "Private school listings on Google Maps in Tangier",
+              },
+              currentDate: "3 November 2026",
+              emphasizeCurrentResults: true,
               id: "roosevelt-kindergarten",
-              name: "Roosevelt Kindergarten",
+              name: "Roosevelt Kindergarten · Google ranking update",
               introduction:
-                "How the school’s visibility changed across eight selected searches.",
+                "By 3 November, Roosevelt Kindergarten appeared on page 1 for two searches and page 2 for six. Compared with 1 October, seven keywords improved and one started ranking.",
               records: [
                 {
                   keyword: "école maternelle Tanger",
                   before: { ranked: true, page: 3, position: 15 },
-                  after: { ranked: true, page: 2, position: 15 },
+                  after: { ranked: true, page: 2, position: 8 },
                   change: "improved",
                 },
                 {
                   keyword: "maternelle privée Tanger",
                   before: { ranked: true, page: 3, position: 6 },
-                  after: { ranked: true, page: 2, position: 6 },
+                  after: { ranked: true, page: 2, position: 9 },
                   change: "improved",
                 },
                 {
                   keyword: "maternelle Tanger",
                   before: { ranked: true, page: 3, position: 11 },
-                  after: { ranked: true, page: 3, position: 2 },
+                  after: { ranked: true, page: 2, position: 15 },
                   change: "improved",
                 },
                 {
                   keyword: "école maternelle à Tanger",
                   before: { ranked: false },
-                  after: { ranked: true, page: 3, position: 11 },
+                  after: { ranked: true, page: 2, position: 20 },
                   change: "started",
                 },
                 {
                   keyword: "préscolaire privé Tanger",
                   before: { ranked: true, page: 3, position: 5 },
-                  after: { ranked: true, page: 2, position: 8 },
+                  after: { ranked: true, page: 2, position: 1 },
                   change: "improved",
                 },
                 {
                   keyword: "préscolaire à Tanger",
                   before: { ranked: true, page: 3, position: 1 },
-                  after: { ranked: true, page: 3, position: 3 },
-                  change: "declined",
+                  after: { ranked: true, page: 2, position: 20 },
+                  change: "improved",
                 },
                 {
                   keyword: "kindergarten tanger",
                   before: { ranked: true, page: 2, position: 10 },
-                  after: { ranked: true, page: 1, position: 2 },
+                  after: { ranked: true, page: 1, position: 3 },
                   change: "improved",
                 },
                 {
                   keyword: "kindergaten school",
                   before: { ranked: true, page: 3, position: 5 },
-                  after: { ranked: true, page: 1, position: 5 },
+                  after: { ranked: true, page: 1, position: 4 },
                   change: "improved",
                 },
               ],
             },
             {
               baselineDate: "13 October 2026",
-              currentDate: "28 October 2026",
+              currentDate: "3 November 2026",
+              dateLabel:
+                "Google local ranking update · 13 October to 3 November 2026",
+              emphasizeCurrentResults: true,
+              highlightCurrentPositions: [1, 2],
               id: "roosevelt-private-school-2",
-              name: "Roosevelt Private School 2 — Collège & Lycée",
+              name: "Roosevelt Private School 2 · Collège & Lycée",
               introduction:
-                "Changes in local search visibility across eight selected keywords.",
+                "By 3 November, Roosevelt Private School 2 appeared on page 1 for all eight tracked searches, up from six on 13 October. Two searches improved to positions 1 and 2, and two started ranking. Four searches moved down but stayed on page 1.",
               records: [
                 {
                   keyword: "collège et lycée privés Tanger",
                   before: { ranked: true, page: 1, position: 6 },
-                  after: { ranked: true, page: 1, position: 3 },
+                  after: { ranked: true, page: 1, position: 1 },
                   change: "improved",
+                  changeLabel: "Up 5",
                 },
                 {
                   keyword: "collège lycée privé Tanger",
                   before: { ranked: true, page: 1, position: 10 },
-                  after: { ranked: true, page: 1, position: 4 },
+                  after: { ranked: true, page: 1, position: 2 },
                   change: "improved",
+                  changeLabel: "Up 8",
                 },
                 {
                   keyword: "collège privé Tanger",
                   before: { ranked: true, page: 1, position: 7 },
-                  after: { ranked: true, page: 1, position: 15 },
+                  after: { ranked: true, page: 1, position: 10 },
                   change: "declined",
+                  changeLabel: "Down 3",
                 },
                 {
                   keyword: "lycée privé Tanger",
                   before: { ranked: true, page: 1, position: 8 },
-                  after: { ranked: true, page: 1, position: 15 },
+                  after: { ranked: true, page: 1, position: 11 },
                   change: "declined",
+                  changeLabel: "Down 3",
                 },
                 {
                   keyword: "college tanger",
                   before: { ranked: true, page: 1, position: 2 },
-                  after: { ranked: true, page: 1, position: 7 },
+                  after: { ranked: true, page: 1, position: 3 },
                   change: "declined",
+                  changeLabel: "Down 1",
                 },
                 {
                   keyword: "lycee tanger",
                   before: { ranked: true, page: 1, position: 6 },
-                  after: { ranked: true, page: 1, position: 20 },
+                  after: { ranked: true, page: 1, position: 8 },
                   change: "declined",
+                  changeLabel: "Down 2",
                 },
                 {
                   keyword: "college privé",
@@ -972,7 +1020,7 @@ export const reportData = {
                 {
                   keyword: "lycee privé",
                   before: { ranked: false },
-                  after: { ranked: true, page: 1, position: 7 },
+                  after: { ranked: true, page: 1, position: 6 },
                   change: "started",
                 },
               ],
@@ -1076,9 +1124,9 @@ export const reportData = {
       evidence: [],
       highlights: [],
       id: "vision-ideas",
-      outlineTitle: "Our Vision & Ideas",
+      outlineTitle: "Our Vision",
       summary: null,
-      title: "Our Vision & Ideas",
+      title: "Our Vision",
     },
   ],
   title: "Full Report",

@@ -18,12 +18,13 @@ interface OverviewGroupProps {
 }
 
 function OverviewGroup({ group }: OverviewGroupProps) {
-  const isOngoing = group.status === "ongoing";
+  const isOngoing = group.status === "ongoing" && !group.badge;
+  const isVerified = group.badge?.tone === "verified";
 
   return (
     <section
       aria-labelledby={`monthly-overview-${group.title.toLowerCase().replaceAll(" ", "-")}`}
-      className={`min-w-0 rounded-2xl border p-5 shadow-[0_12px_30px_rgba(24,59,52,0.035)] sm:p-6 ${
+      className={`${group.badge ? "flex flex-col " : ""}min-w-0 rounded-2xl border p-5 shadow-[0_12px_30px_rgba(24,59,52,0.035)] sm:p-6 ${
         isOngoing
           ? "border-report-orange/30 bg-white/[0.85]"
           : "border-dark-green/10 bg-white/75"
@@ -37,9 +38,23 @@ function OverviewGroup({ group }: OverviewGroupProps) {
       >
         {group.title}
       </h4>
-      <ul className="mt-5 space-y-3 text-base leading-7 text-dark-green/75">
+      {group.badge ? (
+        <p
+          className={`mt-3 w-fit rounded-full border px-3 py-1 text-xs font-semibold leading-5 ${
+            isVerified
+              ? "border-dark-green/15 bg-dark-green/8 text-dark-green"
+              : "border-report-orange/25 bg-report-orange/10 text-dark-green"
+          }`}
+        >
+          {group.badge.label}
+        </p>
+      ) : null}
+      <ul className="mt-5 space-y-2 text-base leading-7 text-dark-green/75">
         {group.items.map((item) => (
-          <li key={item} className="flex items-start gap-3">
+          <li
+            key={item}
+            className="flex items-start gap-3 rounded-xl border-t border-dark-green/12 bg-dark-green/[0.035] px-3 py-2.5 shadow-[0_5px_12px_rgba(24,59,52,0.06)]"
+          >
             <span
               aria-hidden="true"
               className="mt-1.5 inline-flex size-[1.125rem] shrink-0 items-center justify-center rounded-full bg-dark-green/8 text-dark-green"
@@ -50,6 +65,29 @@ function OverviewGroup({ group }: OverviewGroupProps) {
           </li>
         ))}
       </ul>
+      {group.callout ? (
+        <aside className="mt-6 border-t border-dark-green/12 pt-5">
+          <div className="rounded-xl border border-report-orange/15 bg-report-orange/[0.07] p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-dark-green/65">
+              {group.callout.title}
+            </p>
+            <p className="mt-2 text-sm leading-6 text-dark-green/75">
+              {group.callout.body.map((part, index) =>
+                part.emphasis ? (
+                  <strong
+                    key={`${part.text}-${index}`}
+                    className="font-semibold text-dark-green"
+                  >
+                    {part.text}
+                  </strong>
+                ) : (
+                  part.text
+                ),
+              )}
+            </p>
+          </div>
+        </aside>
+      ) : null}
     </section>
   );
 }
@@ -75,7 +113,7 @@ export function MonthlyOverview({
           <h3 className="text-balance text-2xl font-semibold leading-tight tracking-[-0.025em] text-dark-green sm:text-3xl">
             {content.website.heading}
           </h3>
-          <div className="mt-8 grid items-stretch gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-8 grid items-stretch gap-5 md:grid-cols-2 lg:grid-cols-3">
             {content.website.groups.map((group) => (
               <OverviewGroup key={group.title} group={group} />
             ))}
@@ -86,7 +124,7 @@ export function MonthlyOverview({
           <h3 className="text-balance text-2xl font-semibold leading-tight tracking-[-0.025em] text-dark-green sm:text-3xl">
             {content.google.heading}
           </h3>
-          <div className="mt-8 grid items-stretch gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-8 grid items-stretch gap-5 md:grid-cols-2 lg:grid-cols-3">
             {content.google.groups.map((group) => (
               <OverviewGroup key={group.title} group={group} />
             ))}

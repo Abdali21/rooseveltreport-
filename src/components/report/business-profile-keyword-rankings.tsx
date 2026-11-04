@@ -1,4 +1,13 @@
+import {
+  Globe2,
+  MapPin,
+  Monitor,
+  Ruler,
+  Search,
+} from "lucide-react";
+
 import type {
+  BusinessProfileCompetitionStat,
   BusinessProfileKeywordRankingsContent,
   BusinessProfileKeywordRecord,
   BusinessProfileKeywordSchool,
@@ -24,7 +33,13 @@ function formatPosition(position: KeywordRankingPosition) {
   return `Page ${position.page} · Position ${position.position}`;
 }
 
-function StatusBadge({ change }: { change: KeywordRankingChange }) {
+function StatusBadge({
+  change,
+  label,
+}: {
+  change: KeywordRankingChange;
+  label?: string;
+}) {
   const className = {
     declined: "border-amber-300 bg-amber-50 text-amber-800",
     improved: "border-dark-green/20 bg-dark-green/8 text-dark-green",
@@ -35,18 +50,100 @@ function StatusBadge({ change }: { change: KeywordRankingChange }) {
     <span
       className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold ${className}`}
     >
-      {changeLabels[change]}
+      {label ?? changeLabels[change]}
     </span>
+  );
+}
+
+function PositionValue({
+  emphasize = false,
+  position,
+}: {
+  emphasize?: boolean;
+  position: KeywordRankingPosition;
+}) {
+  const value = formatPosition(position);
+
+  if (emphasize) {
+    return (
+      <span className="inline-flex rounded-full bg-dark-green px-2.5 py-1 font-semibold text-warm-white shadow-[0_4px_10px_rgba(24,59,52,0.15)]">
+        {value}
+      </span>
+    );
+  }
+
+  return value;
+}
+
+function CompetitionStatCard({
+  stat,
+}: {
+  stat: BusinessProfileCompetitionStat;
+}) {
+  return (
+    <aside
+      aria-label={stat.heading}
+      className="grid gap-6 rounded-[2rem] bg-dark-green p-6 shadow-[0_18px_40px_rgba(24,59,52,0.18)] sm:grid-cols-[13rem_minmax(0,1fr)] sm:items-center sm:gap-8 sm:p-8 lg:p-10 xl:grid-cols-[17rem_minmax(0,1fr)] xl:gap-10"
+    >
+      <p className="whitespace-nowrap text-6xl font-semibold leading-none tracking-[-0.06em] text-report-orange sm:text-7xl xl:text-8xl">
+        {stat.value}
+      </p>
+      <div className="min-w-0">
+        <h4 className="text-xl font-semibold leading-snug tracking-[-0.02em] text-white sm:text-2xl">
+          {stat.heading}
+        </h4>
+      </div>
+    </aside>
+  );
+}
+
+const methodologyItems = [
+  {
+    Icon: Search,
+    label: "Source",
+    value: "Manual Google Business Profile ranking checks",
+  },
+  { Icon: MapPin, label: "Location", value: "Kawacim" },
+  { Icon: Monitor, label: "Device", value: "Desktop" },
+  { Icon: Globe2, label: "Browser", value: "Chrome Incognito" },
+  {
+    Icon: Ruler,
+    label: "Measurement",
+    value: "Positions reflect the recorded checks on each date",
+  },
+] as const;
+
+function RankingMethodology() {
+  return (
+    <dl className="grid gap-x-6 gap-y-4 rounded-2xl border border-dark-green/10 bg-white/65 p-4 text-sm sm:p-5 md:grid-cols-2">
+      {methodologyItems.map(({ Icon, label, value }) => (
+        <div className="flex min-w-0 gap-3" key={label}>
+          <Icon
+            aria-hidden="true"
+            className="mt-0.5 size-4 shrink-0 text-report-orange"
+            strokeWidth={1.8}
+          />
+          <div className="min-w-0 leading-5">
+            <dt className="font-semibold text-dark-green">{label}</dt>
+            <dd className="text-dark-green/65">{value}</dd>
+          </div>
+        </div>
+      ))}
+    </dl>
   );
 }
 
 function DesktopTable({
   baselineDate,
   currentDate,
+  emphasizeCurrentResults,
+  highlightCurrentPositions,
   records,
 }: {
   baselineDate: string;
   currentDate: string;
+  emphasizeCurrentResults: boolean;
+  highlightCurrentPositions?: readonly number[];
   records: readonly BusinessProfileKeywordRecord[];
 }) {
   return (
@@ -56,7 +153,13 @@ function DesktopTable({
           <tr>
             <th className="px-5 py-4 font-semibold">Keyword</th>
             <th className="px-5 py-4 font-semibold">{baselineDate}</th>
-            <th className="px-5 py-4 font-semibold">{currentDate}</th>
+            <th
+              className={`px-5 py-4 font-semibold ${
+                emphasizeCurrentResults ? "bg-report-orange/25" : ""
+              }`}
+            >
+              {currentDate}
+            </th>
             <th className="px-5 py-4 font-semibold">Change</th>
           </tr>
         </thead>
@@ -72,11 +175,30 @@ function DesktopTable({
               <td className="px-5 py-4 text-dark-green/70">
                 {formatPosition(record.before)}
               </td>
-              <td className="px-5 py-4 font-medium text-dark-green">
-                {formatPosition(record.after)}
+              <td
+                className={`px-5 py-4 font-medium text-dark-green ${
+                  emphasizeCurrentResults
+                    ? "bg-dark-green/[0.045] font-semibold"
+                    : ""
+                }`}
+              >
+                <PositionValue
+                  emphasize={
+                    record.after.ranked &&
+                    (highlightCurrentPositions
+                      ? highlightCurrentPositions.includes(
+                          record.after.position,
+                        )
+                      : emphasizeCurrentResults && record.after.page === 1)
+                  }
+                  position={record.after}
+                />
               </td>
               <td className="px-5 py-4">
-                <StatusBadge change={record.change} />
+                <StatusBadge
+                  change={record.change}
+                  label={record.changeLabel}
+                />
               </td>
             </tr>
           ))}
@@ -89,10 +211,14 @@ function DesktopTable({
 function MobileCards({
   baselineDate,
   currentDate,
+  emphasizeCurrentResults,
+  highlightCurrentPositions,
   records,
 }: {
   baselineDate: string;
   currentDate: string;
+  emphasizeCurrentResults: boolean;
+  highlightCurrentPositions?: readonly number[];
   records: readonly BusinessProfileKeywordRecord[];
 }) {
   return (
@@ -106,7 +232,10 @@ function MobileCards({
             <h5 className="max-w-[18rem] font-semibold text-dark-green">
               {record.keyword}
             </h5>
-            <StatusBadge change={record.change} />
+            <StatusBadge
+              change={record.change}
+              label={record.changeLabel}
+            />
           </div>
           <dl className="mt-5 grid gap-4 sm:grid-cols-2">
             <div>
@@ -117,12 +246,28 @@ function MobileCards({
                 {formatPosition(record.before)}
               </dd>
             </div>
-            <div>
+            <div
+              className={
+                emphasizeCurrentResults
+                  ? "border-l-2 border-report-orange/50 pl-3"
+                  : undefined
+              }
+            >
               <dt className="text-xs font-semibold uppercase tracking-[0.12em] text-report-orange">
                 After · {currentDate}
               </dt>
               <dd className="mt-1.5 text-sm font-semibold text-dark-green">
-                {formatPosition(record.after)}
+                <PositionValue
+                  emphasize={
+                    record.after.ranked &&
+                    (highlightCurrentPositions
+                      ? highlightCurrentPositions.includes(
+                          record.after.position,
+                        )
+                      : emphasizeCurrentResults && record.after.page === 1)
+                  }
+                  position={record.after}
+                />
               </dd>
             </div>
           </dl>
@@ -133,55 +278,47 @@ function MobileCards({
 }
 
 function SchoolRankings({
-  clarification,
   school,
-  sourceNote,
 }: {
-  clarification: string;
   school: BusinessProfileKeywordSchool;
-  sourceNote: string;
 }) {
-  const comparisonHeadingId = `${school.id}-complete-keyword-comparison-heading`;
-
   return (
-    <article className="mt-10 rounded-[2rem] border border-dark-green/12 bg-warm-white/80 p-5 sm:mt-12 sm:p-8 lg:p-10">
+    <article className="rounded-[2rem] border border-dark-green/12 bg-warm-white/80 p-5 sm:p-8 lg:p-10">
       <header className="max-w-4xl">
         <h4 className="text-balance text-2xl font-semibold tracking-[-0.03em] text-dark-green sm:text-3xl">
           {school.name}
         </h4>
         <p className="mt-3 text-sm font-semibold uppercase tracking-[0.12em] text-report-orange">
-          {school.baselineDate} → {school.currentDate}
-        </p>
-        <p className="mt-4 text-base leading-7 text-dark-green/70 sm:text-lg">
-          {school.introduction}
+          Baseline · {school.baselineDate}
         </p>
       </header>
 
-      <section aria-labelledby={comparisonHeadingId} className="mt-8 sm:mt-10">
-        <h5
-          id={comparisonHeadingId}
-          className="text-xl font-semibold tracking-[-0.02em] text-dark-green sm:text-2xl"
-        >
-          Complete keyword comparison
-        </h5>
-        <div className="mt-6">
+      <section
+        aria-label="Keyword ranking comparison"
+        className="mt-6 sm:mt-8"
+      >
+        <RankingMethodology />
+        <div className="mt-5">
           <DesktopTable
             baselineDate={school.baselineDate}
             currentDate={school.currentDate}
+            emphasizeCurrentResults={Boolean(
+              school.emphasizeCurrentResults,
+            )}
+            highlightCurrentPositions={school.highlightCurrentPositions}
             records={school.records}
           />
           <MobileCards
             baselineDate={school.baselineDate}
             currentDate={school.currentDate}
+            emphasizeCurrentResults={Boolean(
+              school.emphasizeCurrentResults,
+            )}
+            highlightCurrentPositions={school.highlightCurrentPositions}
             records={school.records}
           />
         </div>
       </section>
-
-      <div className="mt-6 grid gap-2 text-xs leading-5 text-dark-green/50 sm:text-sm">
-        <p>{sourceNote}</p>
-        <p>{clarification}</p>
-      </div>
     </article>
   );
 }
@@ -208,12 +345,12 @@ export function BusinessProfileKeywordRankings({
         </header>
 
         {content.schools.map((school) => (
-          <SchoolRankings
-            key={school.id}
-            clarification={content.clarification}
-            school={school}
-            sourceNote={content.sourceNote}
-          />
+          <div className="mt-10 space-y-4 sm:mt-12 sm:space-y-5" key={school.id}>
+            {school.competitionStat ? (
+              <CompetitionStatCard stat={school.competitionStat} />
+            ) : null}
+            <SchoolRankings school={school} />
+          </div>
         ))}
       </div>
     </section>
