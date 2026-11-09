@@ -1,5 +1,6 @@
 import { ReportShell } from "@/components/layout/report-shell";
 import { MonthlyOverview } from "@/components/report/monthly-overview";
+import { ProposedNextProjects } from "@/components/report/proposed-next-projects";
 import { ReportHero } from "@/components/report/report-hero";
 import { ReportSection } from "@/components/report/report-section";
 import { ResultsEvidence } from "@/components/report/results-evidence";
@@ -14,10 +15,16 @@ export default function Home() {
     <ReportShell>
       <main id="report-content">
         <ReportHero
-          outlineItems={reportData.sections.map((section) => ({
-            href: `#${section.id}`,
-            label: section.outlineTitle,
-          }))}
+          outlineItems={[
+            ...reportData.sections.map((section) => ({
+              href: `#${section.id}` as const,
+              label: section.outlineTitle,
+            })),
+            {
+              href: `#${reportData.proposedProjects.id}`,
+              label: reportData.proposedProjects.outlineTitle,
+            },
+          ]}
           periodDateTime={`${reportData.period.start}/${reportData.period.end}`}
           periodLabel={reportData.period.label}
           schoolName={reportData.client.toUpperCase()}
@@ -43,6 +50,11 @@ export default function Home() {
             section={section}
           />
         ))}
+
+        <ProposedNextProjects
+          content={reportData.proposedProjects}
+          number={String(reportData.sections.length + 1).padStart(2, "0")}
+        />
       </main>
     </ReportShell>
   );

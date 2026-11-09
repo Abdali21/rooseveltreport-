@@ -91,7 +91,7 @@ export function ReportHero({
         </div>
 
         <nav aria-label="Report chapters" className="border-t border-white/12 pt-7 sm:pt-8">
-          <ol className="grid gap-3 sm:grid-cols-3 sm:gap-4">
+          <ol className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
             {outlineItems.map((item, index) => {
               const number = String(index + 1).padStart(2, "0");
               const content = (

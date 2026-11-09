@@ -168,6 +168,47 @@ export interface ReportSectionData {
   title: string;
 }
 
+export interface ProposalListItem {
+  detail: string;
+  label?: string;
+}
+
+export interface ProposalFact {
+  emphasis?: boolean;
+  label: string;
+  value: string;
+}
+
+export interface ProposalListGroup {
+  emphasis?: boolean;
+  heading: string;
+  items: readonly ProposalListItem[];
+}
+
+export interface ProposalCallout {
+  body: string;
+  label: string;
+  tone: "neutral" | "orange";
+}
+
+export interface ProposalOffer {
+  callouts: readonly ProposalCallout[];
+  facts: readonly ProposalFact[];
+  groups: readonly ProposalListGroup[];
+  note?: string;
+  number: string;
+  objective: string;
+  title: string;
+}
+
+export interface ProposedProjectsContent {
+  id: "proposed-next-projects";
+  introduction: string;
+  offers: readonly ProposalOffer[];
+  outlineTitle: string;
+  title: string;
+}
+
 export interface ReportData {
   client: string;
   hero: {
@@ -179,6 +220,7 @@ export interface ReportData {
     label: string;
     start: string;
   };
+  proposedProjects: ProposedProjectsContent;
   sections: readonly ReportSectionData[];
   title: string;
 }
@@ -197,6 +239,140 @@ export const reportData = {
     end: "2026-10-31",
     label: "1–31 October 2026",
     start: "2026-10-01",
+  },
+  proposedProjects: {
+    id: "proposed-next-projects",
+    introduction:
+      "Two optional propositions for Roosevelt’s next phase of digital visibility and school-life communication.",
+    offers: [
+      {
+        number: "1",
+        title: "Google Visibility and Reputation",
+        objective:
+          "Strengthen Roosevelt’s presence and reputation on Google.",
+        facts: [
+          {
+            label: "Project period",
+            value: "November–December 2026",
+          },
+          {
+            emphasis: true,
+            label: "Delivery deadline",
+            value: "29 December 2026",
+          },
+        ],
+        groups: [
+          {
+            heading: "Included services",
+            items: [
+              {
+                label: "Blog content",
+                detail:
+                  "Approximately 20 posts total across French and English, targeting 10 per month. Includes SEO optimization, internal links, and publication.",
+              },
+              {
+                label: "Review campaign",
+                detail:
+                  "Review link/QR code, request templates, staff guidance, and tracking, aiming for 50+ genuine new reviews on the eligible kindergarten profile. This is a target, dependent on families’ responses and review availability.",
+              },
+              {
+                label: "Directories",
+                detail:
+                  "10 relevant listing creations or corrections for the Tangier campuses, with submission records.",
+              },
+              {
+                label: "Monthly reporting",
+                detail:
+                  "2 reports covering completed work, available Google performance, and review progress.",
+              },
+              {
+                label: "Local ranking tracking",
+                detail:
+                  "Initial baseline and monthly tracking for 10 agreed local keywords from consistent Tangier locations.",
+              },
+              {
+                label: "Lifetime website maintenance included",
+                detail:
+                  "Routine updates and technical checks for the lifetime of the current website.",
+              },
+            ],
+          },
+        ],
+        callouts: [
+          {
+            label: "Free maintenance clarification",
+            body: "Hosting, domain renewals, paid licenses, future content, redesigns, and further SEO projects are excluded from free maintenance.",
+            tone: "orange",
+          },
+        ],
+      },
+      {
+        number: "2",
+        title: "Social Media Setup and Event Content Production",
+        objective:
+          "Showcase Roosevelt’s events and school life through original content published across its social channels.",
+        facts: [
+          {
+            label: "Initial setup",
+            value: "Included in the first approved event project",
+          },
+        ],
+        groups: [
+          {
+            heading: "Initial setup",
+            items: [
+              {
+                detail:
+                  "Organize Facebook and Instagram through Meta Business Suite, configure team access, and simplify publishing.",
+              },
+              {
+                detail: "Prepare the school’s LinkedIn page for publication.",
+              },
+              {
+                detail: "Create and brand its YouTube channel.",
+              },
+              {
+                detail: "Keep account ownership and control with the school.",
+              },
+            ],
+          },
+          {
+            heading: "For each selected event",
+            items: [
+              {
+                detail:
+                  "Plan coverage, important moments, and expected content with the school.",
+              },
+              {
+                detail:
+                  "Organize photography and filming, coordinating production professionals when needed.",
+              },
+              {
+                detail: "Edit the agreed photos, reels, and event videos.",
+              },
+              {
+                detail:
+                  "Prepare captions, covers, and formats suited to each platform.",
+              },
+              {
+                detail:
+                  "Publish approved content on Instagram, Facebook, LinkedIn, and YouTube according to the agreed distribution plan.",
+              },
+            ],
+          },
+        ],
+        callouts: [
+          {
+            label: "Event planning",
+            body: "Each selected event is planned separately. Coverage hours, locations, production team, deliverable quantities, platforms, revisions, and delivery dates are agreed before production begins.",
+            tone: "neutral",
+          },
+        ],
+        note: "The school coordinates filming permissions and approves content before publication. Daily community management and paid advertising require separate agreements.",
+      },
+    ],
+    outlineTitle: "Propositions.",
+    title: "Propositions.",
   },
   sections: [
     {
@@ -280,25 +456,17 @@ export const reportData = {
             },
             {
               title: "Roosevelt Private School · Primary",
-              status: "ongoing",
+              status: "completed",
               badge: {
-                label: "Verification in progress",
-                tone: "attention",
+                label: "Verified",
+                tone: "verified",
               },
               items: [
-                "Successfully verified and optimized the original profile after several attempts.",
+                "Optimized the original Google Business Profile.",
                 "Updated the school category, description, address, opening hours, and contact details.",
                 "Added professional photos and listed the school’s services.",
                 "Linked the profile to the dedicated Primary page and added LinkedIn, Facebook, and Instagram links.",
               ],
-              callout: {
-                title: "Duplicate listing",
-                body: [
-                  {
-                    text: "Google removed the optimized profile as a duplicate and kept the older listing public. Verification and updates are now focused on the older listing.",
-                  },
-                ],
-              },
             },
             {
               title: "Roosevelt Private School 2 · Collège & Lycée",
