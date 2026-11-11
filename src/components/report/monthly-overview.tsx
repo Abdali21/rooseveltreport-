@@ -43,28 +43,30 @@ function OverviewGroup({ group }: OverviewGroupProps) {
           className={`mt-3 w-fit rounded-full border px-3 py-1 text-xs font-semibold leading-5 ${
             isVerified
               ? "border-dark-green/15 bg-dark-green/8 text-dark-green"
-              : "border-report-orange/25 bg-report-orange/10 text-dark-green"
+              : "border-amber-300 bg-amber-50 text-amber-800"
           }`}
         >
           {group.badge.label}
         </p>
       ) : null}
-      <ul className="mt-5 space-y-2 text-base leading-7 text-dark-green/75">
-        {group.items.map((item) => (
-          <li
-            key={item}
-            className="flex items-start gap-3 rounded-xl border-t border-dark-green/12 bg-dark-green/[0.035] px-3 py-2.5 shadow-[0_5px_12px_rgba(24,59,52,0.06)]"
-          >
-            <span
-              aria-hidden="true"
-              className="mt-1.5 inline-flex size-[1.125rem] shrink-0 items-center justify-center rounded-full bg-dark-green/8 text-dark-green"
+      {group.items.length > 0 ? (
+        <ul className="mt-5 space-y-2 text-base leading-7 text-dark-green/75">
+          {group.items.map((item) => (
+            <li
+              key={item}
+              className="flex items-start gap-3 rounded-xl border-t border-dark-green/12 bg-dark-green/[0.035] px-3 py-2.5 shadow-[0_5px_12px_rgba(24,59,52,0.06)]"
             >
-              <Check className="size-3" strokeWidth={2.2} />
-            </span>
-            <span className="min-w-0 break-words">{item}</span>
-          </li>
-        ))}
-      </ul>
+              <span
+                aria-hidden="true"
+                className="mt-1.5 inline-flex size-[1.125rem] shrink-0 items-center justify-center rounded-full bg-dark-green/8 text-dark-green"
+              >
+                <Check className="size-3" strokeWidth={2.2} />
+              </span>
+              <span className="min-w-0 break-words">{item}</span>
+            </li>
+          ))}
+        </ul>
+      ) : null}
       {group.callout ? (
         <aside className="mt-6 border-t border-dark-green/12 pt-5">
           <div className="rounded-xl border border-report-orange/15 bg-report-orange/[0.07] p-4">

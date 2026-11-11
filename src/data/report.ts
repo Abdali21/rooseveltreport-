@@ -446,63 +446,25 @@ export const reportData = {
                 label: "Verified",
                 tone: "verified",
               },
-              items: [
-                "Successfully verified the Google Business Profile.",
-                "Selected the Kindergarten category and updated the school description, address, opening hours, and contact details.",
-                "Added professional photos and listed the school’s services.",
-                "Linked the profile to the dedicated Kindergarten page and added LinkedIn, Facebook, and Instagram links.",
-                "Published school activity posts and started collecting parent reviews.",
-              ],
+              items: [],
             },
             {
               title: "Roosevelt Private School · Primary",
+              status: "ongoing",
+              badge: {
+                label: "Not verified — verification under review",
+                tone: "attention",
+              },
+              items: [],
+            },
+            {
+              title: "Roosevelt Private School 2 · Collège & Lycée",
               status: "completed",
               badge: {
                 label: "Verified",
                 tone: "verified",
               },
-              items: [
-                "Optimized the original Google Business Profile.",
-                "Updated the school category, description, address, opening hours, and contact details.",
-                "Added professional photos and listed the school’s services.",
-                "Linked the profile to the dedicated Primary page and added LinkedIn, Facebook, and Instagram links.",
-              ],
-            },
-            {
-              title: "Roosevelt Private School 2 · Collège & Lycée",
-              status: "ongoing",
-              badge: {
-                label: "Name correction pending",
-                tone: "attention",
-              },
-              items: [
-                "Updated the school category, description, address, opening hours, and contact details.",
-                "Added professional campus photos and listed the school’s services.",
-                "Linked the profile to the dedicated Collège & Lycée page and added LinkedIn, Facebook, and Instagram links.",
-                "Corrected the school name in the Google Business Profile dashboard.",
-              ],
-              callout: {
-                title: "French-language search results",
-                body: [
-                  {
-                    text: "Google’s French-language results still display ",
-                  },
-                  {
-                    emphasis: true,
-                    text: "“Roosevelt School 2 College, Lycee.”",
-                  },
-                  {
-                    text: " English-language results show the corrected name, ",
-                  },
-                  {
-                    emphasis: true,
-                    text: "“Roosevelt Private School 2.”",
-                  },
-                  {
-                    text: " Google Support has been contacted to request a correction.",
-                  },
-                ],
-              },
+              items: [],
             },
           ],
         },

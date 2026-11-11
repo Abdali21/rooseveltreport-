@@ -43,7 +43,7 @@ const digitalAreas = [
   {
     icon: Share2,
     title: "Social Media",
-    description: "Instagram, Facebook, and LinkedIn.",
+    description: "Instagram, Facebook, LinkedIn, and YouTube.",
   },
   {
     icon: Camera,
@@ -72,6 +72,9 @@ const strategySteps = [
     items: [
       {
         text: "Instagram, Facebook, and LinkedIn posts.",
+      },
+      {
+        text: "YouTube channel creation and video publishing featuring school events, activities, and achievements.",
       },
       {
         text: "Google Business Profile posts featuring school events and activities.",
